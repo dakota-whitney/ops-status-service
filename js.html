@@ -1,0 +1,91 @@
+<script>
+const toggleLoading = container => {
+  if(container.querySelector("#loading")) container.querySelector("#loading").remove();
+  else{
+    const loading = document.createElement('img');
+    loading.src = "https://github.com/dakota-whitney/ops-lighthouse-appsscript/blob/main/img/loading.gif?raw=true";
+    loading.id = "loading";
+    loading.alt = "loading";
+    container.appendChild(loading);
+  };
+};
+
+const setStatus = (statusLegend,status) => {
+  if(status.match(/operational/i)){
+    statusLegend.innerText = "Good";
+    statusLegend.classList.remove(`status-alert`,`status-waring`);
+  }
+  else if(status.match(/warning/i)){
+    statusLegend.innerText = "Alert";
+    statusLegend.classList.remove(`status-operational`,`status-alert`);
+  }
+  else{
+    statusLegend.innerText = "Alert";
+    statusLegend.classList.remove(`status-operational`,`status-warning`);
+  };
+  statusLegend.classList.add(`status-${status.toLowerCase()}`)
+};
+
+const feedHandler = (statusFeed,platform) => {
+  platform = platform.platformKey;
+  console.log(`${platform} status feed: %o`,statusFeed);
+  const container = document.getElementById(`${platform}-container`);
+  toggleLoading(container);
+  let {investigating,watching,fixed} = statusFeed._regexes;
+  investigating = new RegExp(investigating,'i');
+  watching = new RegExp(watching,'i');
+  fixed = new RegExp(fixed,'i');
+  let status = '';
+  statusFeed._items.forEach((statusItem,i) => {
+    const {title,link,pubDate,description} = statusItem;
+    status = 'operational';
+    if(!description.match(fixed)){
+      if(title.match(watching)) status = 'warning';
+      else if(title.match(investigating)) status = 'alert';
+    };
+    if(i === 0){
+      const platformStatus = document.getElementById(`${platform}-status`);
+      setStatus(platformStatus,status)
+    };
+    const row = document.createElement("tr");
+    row.innerHTML = `<th>${new Date(pubDate).toLocaleString({hour12:true})}</th><td><a class="incident-${status}" href="${link}" target="_blank">${title}</a></td>`;
+    if(i % 2 == 0) row.style.backgroundColor = 'lightgray';
+    document.getElementById(`${platform}-status-table`).appendChild(row);
+  })
+};
+
+const newRelicSuccessHandler = newRelicEmails => {
+  console.log(`New relic emails: %o`,newRelicEmails);
+  const newRelicContainer = document.getElementById("new-relic-container");
+  toggleLoading(newRelicContainer);
+  newRelicEmails.forEach((statusEmail,i) => {
+      const {sent,subject} = statusEmail;
+      const [incidentNumber] = subject.match(/(?<=Incident\s)\d+/);
+      let incidentStatus;
+      if(subject.includes("OPENED")) incidentStatus = 'alert';
+      else if(subject.includes("CLOSED")) incidentStatus = 'operational';
+      if(i === 0) setStatus(document.getElementById("new-relic-status"),incidentStatus);
+      if(subject.includes("ACKNOWLEDGED")) incidentStatus = 'warning';
+      const row = document.createElement('tr');
+      row.innerHTML = `<th>${new Date(sent).toLocaleString({hour12:true})}</th><td class="incident-${incidentStatus}">${subject}</td>`;
+      if(i % 2 == 0) row.style.backgroundColor = 'lightgray';
+      document.getElementById("new-relic-status-table").appendChild(row);
+  });
+};
+
+const vipSuccessHandler = statusObject => {
+  console.log('VIP status: %o',statusObject);
+  const vipContainer = document.getElementById("vip-container");
+  toggleLoading(vipContainer);
+  const vipStatus = document.getElementById("vip-status");
+  setStatus(vipStatus,statusObject.status);
+  let i = 0;
+  for(const [component,componentStatus] of Object.entries(statusObject.components)){
+    const row = document.createElement("tr");
+    row.innerHTML = `<th>${component}</th><td class="incident-${componentStatus.match(/operational/i) ? 'operational' : 'alert'}">${componentStatus}</td>`;
+    if(i % 2 == 0) row.style.backgroundColor = 'lightgray';
+    document.getElementById("vip-status-table").appendChild(row);
+    i++;
+  };
+};
+</script>

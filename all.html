@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <?!= include('styles'); ?>
+  </head>
+  <body>
+    <nav>
+      <h1 id="title">Ops Status Service</h1>
+      <div id="nav-links">
+        <a class="nav-link" href="https://theplatform.service-now.com/support_portal/" target="_blank">CVP</a>
+        <a class="nav-link" href="https://api.twitterstat.us/" target="_blank">Twitter</a>
+        <a class="nav-link" href="https://downdetector.com/status/youtube/" target="_blank">YouTube</a>
+        <a class="nav-link" href="https://downdetector.com/status/facebook/" target="_blank">Facebook</a>
+      </div>
+      <p id="timestamp">Updated as of <?=new Date().toLocaleString({hour12:true})?></p>
+    </nav>
+    <main>
+      <a id="ots-ticket-link" href="https://jira.inbcu.com/servicedesk/customer/portal/261" target="_blank">Open an OTS Digital Ticket</a>
+      <section id="status-grid">
+        <fieldset id="new-relic-container" class="status-container">
+          <legend id="new-relic-header" class="status-header">New Relic Status: <span id="new-relic-status"></span></legend>
+          <table id="new-relic-status-table" class="status-table"></table>
+        </fieldset>
+        <fieldset id="vip-container" class="status-container">
+          <legend id="vip-header" class="status-header">VIP Status: <a href="https://automatticstatus.com/" target="_blank" id="vip-status" class="status-link"></a></legend>
+          <table id="vip-status-table" class="status-table"></table>
+        </fieldset>
+        <fieldset id="akamai-container" class="status-container">
+          <legend id="akamai-header" class="status-header">Akamai Status: <a href="https://www.akamaistatus.com/#" target="_blank" id="akamai-status" class="status-link"></a></legend>
+          <table id="akamai-status-table" class="status-table"></table>
+        </fieldset>
+        <fieldset id="github-container" class="status-container">
+          <legend id="github-header" class="status-header">GitHub Status: <a href="https://www.githubstatus.com/" target="_blank" id="github-status" class="status-link"></a></legend>
+          <table id="github-status-table" class="status-table"></table>
+        </fieldset>
+      <fieldset id="sailthru-container" class="status-container">
+          <legend id="sailthru-header" class="status-header">Sailthru Status: <a href="https://status.sailthru.com/#!/" target="_blank" id="sailthru-status" class="status-link"></a></legend>
+          <table id="sailthru-status-table" class="status-table"></table>
+        </fieldset>
+        <fieldset id="airship-container" class="status-container">
+          <legend id="airship-header" class="status-header">Urban Airship Status: <a href="https://status.airship.com/" target="_blank" id="airship-status" class="status-link"></a></legend>
+          <table id="airship-status-table" class="status-table"></table>
+      </fieldset>
+      </section>
+  </main>
+    <?!= include('js'); ?>
+    <script>
+      document.querySelectorAll("fieldset").forEach(statusContainer => toggleLoading(statusContainer));
+      google.script.run.withSuccessHandler(newRelicSuccessHandler).getNewRelicEmails();
+      google.script.run.withSuccessHandler(vipSuccessHandler).fetchVipStatus();
+      google.script.run.withSuccessHandler(feedHandler).withUserObject({platformKey:'akamai'}).fetchAkamaiStatusFeed();
+      google.script.run.withSuccessHandler(feedHandler).withUserObject({platformKey:'github'}).fetchGithubStatusFeed();
+      google.script.run.withSuccessHandler(feedHandler).withUserObject({platformKey:'sailthru'}).fetchSailthruStatusFeed();
+      google.script.run.withSuccessHandler(feedHandler).withUserObject({platformKey:'airship'}).fetchAirshipStatusFeed();
+    </script>
+  </body>
+</html>

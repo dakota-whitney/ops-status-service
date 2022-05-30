@@ -1,0 +1,226 @@
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
+<style>
+*{
+  margin:0;
+  padding:0;
+}
+body{
+  background-color: #f0f3f4;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  font-family: 'Montserrat', sans-serif;
+}
+a{
+  text-decoration:none;
+  color: inherit;
+}
+nav{
+  display: flex;
+  flex-flow: row wrap;
+  justify-content:space-around;
+  align-items: center;
+  position: sticky;
+  width:100%;
+  height:100px;
+  background-color:#3c0997;
+  margin:0px 0px 50px 0px;
+  color:white;
+  box-shadow: 5px 0px 10px black;
+}
+#title{
+  font-family: Futura, "Trebuchet MS";
+  font-size:45px;
+}
+#nav-links{
+  display:flex;
+  justify-content:center;
+  align-items: center;
+  height:100%;
+}
+.nav-link{
+  display:flex;
+  justify-content:center;
+  align-items: center;
+  width:150px;
+  height:120%;
+  font-size:25px;
+  color:white;
+}
+.nav-link:hover{
+  color:#3c0997;
+  background-color:white;
+  box-shadow:0px 2px 5px black;
+}
+#timestamp{
+  position:absolute;
+  top:100%;
+  right:69%;
+  font-size:20px;
+  color:#3c0997;
+}
+main{
+  text-align:center;
+  padding-bottom:10px;
+}
+#ots-ticket-link{
+  font-size:35px;
+  font-weight:bolder;
+  background-color:#3c0997;
+  color:white;
+  border-radius:10px;
+  padding:5px;
+}
+#ots-ticket-link:hover{
+  background-color:#f0f3f4;
+  color:#3c0997;
+}
+#status-grid{
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  row-gap:25px;
+  justify-content: center;
+  justify-items:center;
+  align-items: center;
+  margin:30px 0px 20px 0px;
+}
+.status-container{
+  width:75%;
+  height:350px;
+  border:none;
+  background-color:white;
+  overflow:scroll;
+  border:1px solid black;
+}
+#loading{
+  max-width:100%;
+  width:80px;
+  height:auto;
+  margin-top:10%;
+}
+.status-header{
+  text-align:center;
+  font-size:35px;
+}
+.status-link,legend span{
+  border-radius:10px;
+  font-weight:bolder;
+  color:white;
+}
+.status-link:hover{
+  background-color:#3c0997; 
+}
+.status-table{
+  background-color:white;
+  width:100%;
+}
+th a{
+  color:black;
+}
+th{
+  color: black;
+  text-align:left;
+  width:40%;
+  padding:5px !important;
+}
+.status-operational{
+  background-color:green;
+  color:white;
+}
+.status-warning{
+  background-color:gold;
+  color:white;
+}
+.status-alert{
+  background-color:red;
+  color:white;
+}
+.incident-operational{
+  color:green !important;
+}
+.incident-warning{
+  color: gold !important;
+}
+.incident-alert{
+  color:red !important;
+}
+#new-relic-container{
+  animation: 0.5s fadeIn linear;
+}
+#new-relic-container > td{
+  width: 60%;
+}
+#vip-container{
+  animation: 1s fadeIn linear;
+}
+#akamai-container{
+  animation: 1.5s fadeIn linear;
+}
+#github-container{
+  animation: 2s fadeIn linear;
+}
+#sailthru-container{
+  animation: 2.5s fadeIn linear;
+}
+#sailthru-container td{
+  font-size:12px;
+}
+#airship-container{
+  animation: 3s fadeIn linear;
+}
+@keyframes fadeIn {
+    from{
+        transform: translateX(-300px);
+        opacity: 0%;
+    }
+    to{
+        transform: translateX(0px);
+        opacity: 100%;
+    }
+}
+@media only screen and (max-width: 1200px){
+  #nav-links{
+    display:none;
+  }
+  .nav-link{
+    width:120%;
+  }
+  #timestamp{
+    top:108%;
+    right:32%;
+  }
+  #status-grid{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .status-container{
+    width:80%;
+    height:400px;
+  }
+}
+@media only screen and (max-width: 812px){
+  #nav-links{
+    display:none;
+  }
+  .nav-link{
+    width:120%;
+  }
+  #timestamp{
+    top:108%;
+    right:32%;
+  }
+  #status-grid{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .status-container{
+    width:80%;
+    height:400px;
+  }
+}
+</style>
